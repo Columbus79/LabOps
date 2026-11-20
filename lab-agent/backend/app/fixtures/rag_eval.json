@@ -1,0 +1,38 @@
+[
+  {
+    "id": "semantic-reservation",
+    "category": "semantic",
+    "query": "提交实验室申请后，什么情况下才可以进去使用？",
+    "expected_sources": ["预约规则.md"]
+  },
+  {
+    "id": "open-hours-keyword",
+    "category": "keyword",
+    "query": "化学实验室 周末 开放时间",
+    "expected_sources": ["开放时间.md"]
+  },
+  {
+    "id": "multiple-documents",
+    "category": "multi_document",
+    "query": "预约设备要选择什么，实验结束前还要做哪些安全操作？",
+    "expected_sources": ["设备使用.md", "安全规范.md"]
+  },
+  {
+    "id": "no-answer",
+    "category": "no_answer",
+    "query": "学校食堂晚餐的价格是多少？",
+    "expected_sources": []
+  },
+  {
+    "id": "low-relevance",
+    "category": "low_relevance",
+    "query": "请推导椭圆曲线密码算法的安全参数。",
+    "expected_sources": []
+  },
+  {
+    "id": "updated-resource-rule",
+    "category": "document_update",
+    "query": "设备预约会不会同时把整个实验室锁住？",
+    "expected_sources": ["设备使用.md"]
+  }
+]

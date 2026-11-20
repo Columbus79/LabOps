@@ -1,0 +1,7 @@
+[
+  {"id":"demo-booking-rule","category":"semantic","query":"审核通过之后怎样开始使用实验室，未签到会怎样？","expected_sources":["DEMO_预约规则.md"]},
+  {"id":"demo-device-fault","category":"office_docx","query":"设备故障时要提交什么工单？","expected_sources":["DEMO_设备操作.docx"]},
+  {"id":"demo-open-hours","category":"office_xlsx","query":"DEMO 测试室的开放时段是什么？","expected_sources":["DEMO_开放时间.xlsx"]},
+  {"id":"demo-safety","category":"office_pptx","query":"进入实验室前需要穿戴什么？","expected_sources":["DEMO_安全规范.pptx"]},
+  {"id":"demo-pdf","category":"office_pdf","query":"How should incidents be reported according to DEMO PDF safety?","expected_sources":["DEMO_安全提示.pdf"]}
+]

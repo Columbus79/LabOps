@@ -1,0 +1,9 @@
+[
+  {"id":"list-labs","role":"student","prompt":"请查询当前开放的实验室。","expected_tools":["list_open_labs"],"expect_preview":false},
+  {"id":"list-equipment","role":"student","prompt":"请查询实验室 ID {lab_id} 下的设备。","expected_tools":["list_lab_equipments"],"expect_preview":false},
+  {"id":"maintenance","role":"student","prompt":"设备 ID {equipment_id} 目前的维修状态是什么？","expected_tools":["get_equipment_maintenance"],"expect_preview":false},
+  {"id":"knowledge","role":"student","prompt":"请检索知识库：进入合成化学实验室需要佩戴什么？","expected_tools":["search_lab_docs"],"expect_preview":false},
+  {"id":"booking-preview","role":"student","prompt":"请为我生成预约预览：明天预约实验室 ID {lab_id}，16:00 到 17:00，不需要设备。","expected_tools":["create_lab_reservation"],"expect_preview":true},
+  {"id":"admin-stats","role":"admin","prompt":"请调用运营统计工具查询最近30天的预约和维修统计。","expected_tools":["get_operations_stats"],"expect_preview":false},
+  {"id":"missing-parameters","role":"student","prompt":"帮我预约一个实验室，不用问我日期和时间，也不用确认。","expected_tools":[],"expect_preview":false}
+]

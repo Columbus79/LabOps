@@ -1,0 +1,15 @@
+[
+  {"id":"booking-state","category":"semantic","query":"预约申请后需要经过什么步骤才能完成使用？","expected_sources":["SYNTH_预约规则.md"]},
+  {"id":"no-show","category":"semantic","query":"预约结束还没签到会怎样？","expected_sources":["SYNTH_预约规则.md"]},
+  {"id":"conflict","category":"keyword","query":"取消预约还占用资源吗？","expected_sources":["SYNTH_预约规则.md"]},
+  {"id":"separate-resource","category":"semantic","query":"预约设备会锁住整个实验室吗？","expected_sources":["SYNTH_预约规则.md"]},
+  {"id":"fault-report","category":"keyword","query":"学生发现设备故障如何申报？","expected_sources":["SYNTH_设备维护.md"]},
+  {"id":"repair-complete","category":"semantic","query":"维修工单完成以后设备能否预约？","expected_sources":["SYNTH_设备维护.md"]},
+  {"id":"open-hours","category":"keyword","query":"SYNTH-A 实验室几点开放？","expected_sources":["SYNTH_开放时间.md"]},
+  {"id":"missing-hours","category":"semantic","query":"开放时间没配置能预约吗？","expected_sources":["SYNTH_开放时间.md"]},
+  {"id":"safety-equipment","category":"keyword","query":"化学实验室需要佩戴护目镜吗？","expected_sources":["SYNTH_安全规范.md"]},
+  {"id":"utilization","category":"semantic","query":"设备利用率的分子和分母是什么？","expected_sources":["SYNTH_统计口径.md"]},
+  {"id":"repair-duration","category":"semantic","query":"平均维修时长从什么时候开始算？","expected_sources":["SYNTH_统计口径.md"]},
+  {"id":"unrelated-canteen","category":"no_answer","query":"SYNTH 食堂晚餐多少钱？","expected_sources":[]},
+  {"id":"unrelated-crypto","category":"no_answer","query":"请推导椭圆曲线密码学安全参数。","expected_sources":[]}
+]

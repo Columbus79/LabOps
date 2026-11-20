@@ -1,0 +1,99 @@
+name: labops
+
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.7-pg17-bookworm
+    container_name: labops-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in the project .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in the project .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the project .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    networks: [labops]
+
+  backend:
+    build:
+      context: ./lab-agent/backend
+      args:
+        APP_UID: ${APP_UID:-501}
+    container_name: labops-backend
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      DATABASE_URL: ${LABOPS_DATABASE_URL:?Set LABOPS_DATABASE_URL in the project .env}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY in the project .env}
+      JWT_EXPIRE_HOURS: ${JWT_EXPIRE_HOURS:-24}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:8080"]}
+      BUSINESS_TIMEZONE: ${BUSINESS_TIMEZONE:-Asia/Shanghai}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      SILICONFLOW_EMBEDDING_API_KEY: ${SILICONFLOW_EMBEDDING_API_KEY:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-Qwen/Qwen3-VL-Embedding-8B}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-4096}
+      RAG_MIN_SIMILARITY: ${RAG_MIN_SIMILARITY:-0.15}
+      UPLOAD_MAX_BYTES: ${UPLOAD_MAX_BYTES:-10485760}
+      AGENT_REQUEST_TIMEOUT_SECONDS: ${AGENT_REQUEST_TIMEOUT_SECONDS:-60}
+    volumes:
+      - ./lab-agent/backend/uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks: [labops]
+
+  scheduler:
+    build:
+      context: ./lab-agent/backend
+      args:
+        APP_UID: ${APP_UID:-501}
+    container_name: labops-scheduler
+    command: ["python", "-m", "app.scheduler"]
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      DATABASE_URL: ${LABOPS_DATABASE_URL:?Set LABOPS_DATABASE_URL in the project .env}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY in the project .env}
+      JWT_EXPIRE_HOURS: ${JWT_EXPIRE_HOURS:-24}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      BUSINESS_TIMEZONE: ${BUSINESS_TIMEZONE:-Asia/Shanghai}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks: [labops]
+
+  nginx:
+    build: ./lab-agent/frontend
+    container_name: labops-nginx
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+        restart: true
+    restart: unless-stopped
+    networks: [labops]
+
+networks:
+  labops:
+    name: labops-network
+    driver: bridge
+
+volumes:
+  postgres_data:
+    external: true
+    name: labops_postgres_data
